@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.ArraySet;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -32,10 +33,12 @@ import com.appoxee.internal.permission.GeofencePermissions;
 import com.appoxee.internal.permission.GeofencingPermissionsCallback;
 import com.appoxee.internal.permission.PermissionsCallback;
 import com.appoxee.push.NotificationMode;
+import com.appoxee.push.PushData;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -250,6 +253,9 @@ public class MappSdkPlugin implements FlutterPlugin, ActivityAware, MethodCallHa
                 this.result = result;
                 requestPermissionPostNotification();
                 break;
+            case Method.GET_INITIAL_MESSAGE:
+                getInitialPushMessage(result);
+                break;
             default:
                 result.notImplemented();
                 break;
@@ -344,7 +350,7 @@ public class MappSdkPlugin implements FlutterPlugin, ActivityAware, MethodCallHa
 
     private void fetchInboxMessage(int templateId, @NonNull Result result) {
         try {
-            Appoxee.instance().fetchInboxMessage(activity, templateId);
+            Appoxee.instance().fetchInboxMessage(templateId);
             handleInAppInboxMessages(result);
         } catch (Exception e) {
             result.error(Method.FETCH_INBOX_MESSAGE, e.getMessage(), null);
@@ -353,7 +359,7 @@ public class MappSdkPlugin implements FlutterPlugin, ActivityAware, MethodCallHa
 
     private void fetchInboxMessages(@NonNull Result result) {
         try {
-            Appoxee.instance().fetchInboxMessages(activity);
+            Appoxee.instance().fetchInboxMessages();
             handleInAppInboxMessages(result);
         } catch (Exception e) {
             result.error(Method.FETCH_INBOX_MESSAGES, e.getMessage(), null);
@@ -538,6 +544,15 @@ public class MappSdkPlugin implements FlutterPlugin, ActivityAware, MethodCallHa
         Intent richIntent = intent.getParcelableExtra("intent");
         if (richIntent != null && richIntent.getAction().equals(Action.RICH_PUSH)) {
             Appoxee.handleRichPush(activity, richIntent);
+        }
+    }
+
+
+    public void getInitialPushMessage(Result result){
+        if (PushBroadcastReceiver.lastMessageRecived != null){
+            result.success(MappSerializer.pushDataToMap(PushBroadcastReceiver.lastMessageRecived, "initialMessage"));
+        }else{
+            result.success(null);
         }
     }
 

@@ -2,6 +2,7 @@ package com.mapp.flutter.sdk;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Looper;
 
 import com.appoxee.internal.logger.Logger;
 import com.appoxee.internal.logger.LoggerFactory;
@@ -16,6 +17,8 @@ public class PushBroadcastReceiver extends PushDataReceiver {
     private final Logger devLogger = LoggerFactory.getDevLogger();
 
     private MethodChannel backgroundMethodChannel;
+
+    static PushData lastMessageRecived;
 
     @Override
     public void onBroadcastReceived(Context context, Intent intent) {
@@ -42,7 +45,6 @@ public class PushBroadcastReceiver extends PushDataReceiver {
     public void onPushReceived(PushData pushData) {
         super.onPushReceived(pushData);
         devLogger.d(pushData);
-
         EventEmitter.getInstance()
                 .sendEvent(new PushNotificationEvent(pushData, "handledRemoteNotification"));
     }
@@ -51,8 +53,9 @@ public class PushBroadcastReceiver extends PushDataReceiver {
     public void onPushOpened(PushData pushData) {
         super.onPushOpened(pushData);
         devLogger.d(pushData);
+        lastMessageRecived = pushData;
         EventEmitter.getInstance()
-                .sendEvent(new PushNotificationEvent(pushData, "handledPushOpen"));
+              .sendEvent(new PushNotificationEvent(pushData, "handledPushOpen"));
     }
 
     @Override

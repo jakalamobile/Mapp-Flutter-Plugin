@@ -47,6 +47,7 @@ public class MappSerializer {
             map.put("silentType", data.silentType);
             map.put("silentData", data.silentData);
             map.put("category", data.category);
+            map.put("android_apx_media", data.iosApxMedia);
             if (data.extraFields != null)
                 for (Map.Entry<String, String> entry : data.extraFields.entrySet()) {
                     String key = entry.getKey();

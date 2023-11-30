@@ -26,5 +26,7 @@ public interface Method {
     String INAPP_MARK_AS_UNREAD = "inAppMarkAsUnread";
     String INAPP_MARK_AS_DELETED = "inAppMarkAsDeleted";
 
+    String GET_INITIAL_MESSAGE = "getInitialMessage";
+
     String PERSMISSION_REQUEST_POST_NOTIFICATION="requestPermissionPostNotification";
 }

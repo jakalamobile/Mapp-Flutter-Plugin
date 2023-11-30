@@ -186,6 +186,12 @@ class MappSdk {
         .invokeMethod(Method.INAPP_MARK_AS_DELETED, [templateId, eventId]);
   }
 
+  static Future<Map<String, dynamic>?> getInitialMessage() async {
+    final Map<String, dynamic>? message = await _channel
+        .invokeMapMethod<String, dynamic>(Method.GET_INITIAL_MESSAGE);
+    return message;
+  }
+
   //geotargeting
 
   static Future<String> startGeoFencing() async {

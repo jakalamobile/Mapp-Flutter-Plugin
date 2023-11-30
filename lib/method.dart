@@ -40,6 +40,8 @@ class Method {
   static const INAPP_MARK_AS_UNREAD = 'inAppMarkAsUnread';
   static const INAPP_MARK_AS_DELETED = 'inAppMarkAsDeleted';
 
+  static const GET_INITIAL_MESSAGE = 'getInitialMessage';
+
   //geotargeting
   static const START_GEOFENCING = 'startGeofencing';
   static const STOP_GEOFENCING = 'stopGeofencing';
