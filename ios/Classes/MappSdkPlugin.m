@@ -4,10 +4,13 @@
 #import "AppoxeeLocationManager.h"
 #import "AppoxeeInappSDK.h"
 #import "AppoxeeSDK.h"
+#import "UserNotifications/UserNotifications.h"
 
 static FlutterMethodChannel *channel;
 
 @interface MappSdkPlugin ()
+
+@property NSDictionary *initialMessage;
 
 @end
 
@@ -20,7 +23,45 @@ static FlutterMethodChannel *channel;
             binaryMessenger:[registrar messenger]];
   MappSdkPlugin* instance = [[MappSdkPlugin alloc] init];
   [registrar addMethodCallDelegate:instance channel:channel];
+  [registrar addApplicationDelegate:instance];
 }
+
+
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler{
+    // NSLog(@"%@",  response.notification.request.content.userInfo);
+    
+    NSString* title = response.notification.request.content.title;
+    NSString* body = response.notification.request.content.body;
+    NSDictionary* userInfo = response.notification.request.content.userInfo;
+    NSString* media = [userInfo objectForKey:@"ios_apx_media"];
+    NSString* dpl = [userInfo objectForKey:@"apx_dpl"];
+    NSNumber* uniqueID = @([[userInfo objectForKey:@"apbcd"] intValue]);
+    NSNumber *badge = [NSNumber numberWithInt:0];
+    
+    NSDictionary<NSString *, id>* extraFields = @{
+        @"ios_apx_media": media,
+        @"apx_dpl": dpl
+    };
+    
+    if ( title != nil && [title length] > 0 ){
+        _initialMessage = @{
+            @"id": uniqueID,
+            @"title": title,
+            @"alert": @"",
+            @"body": body,
+            @"badge": badge,
+            @"subtitle": @"",
+            @"category": @"",
+            @"extraFields": extraFields,
+            @"isRich": @"false",
+            @"isSilent": @"false",
+            @"isTriggerUpdate": @"false"
+        };
+    }
+    
+}
+
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
   if ([@"getPlatformVersion" isEqualToString:call.method]) {
@@ -28,6 +69,7 @@ static FlutterMethodChannel *channel;
   } else if ([@"engage" isEqualToString:call.method]){
     NSNumber* serverNumber = call.arguments[2];
     NSLog(@"server: %@", serverNumber);
+      
     [[InAppMessageDelegate sharedObject] initWith:channel];
     [[InAppMessageDelegate sharedObject] addNotificationListeners];
     [[PushMessageDelegate sharedObject] initWith:channel];
@@ -36,6 +78,7 @@ static FlutterMethodChannel *channel;
     [[Appoxee shared] engageAndAutoIntegrateWithLaunchOptions:NULL andDelegate:(id)[PushMessageDelegate sharedObject] with:serv];
     INAPPSERVER inappServ = [self getInappServerKeyFor: serverNumber];
     [[AppoxeeInapp shared] engageWithDelegate:(id)[InAppMessageDelegate sharedObject] with:inappServ];
+    result(@"OK");
   } else if ([@"postponeNotificationRequest" isEqualToString:call.method]){
     NSNumber *value = call.arguments[0];
     [[Appoxee shared] setPostponeNotificationRequest:[value boolValue]];
@@ -148,6 +191,10 @@ static FlutterMethodChannel *channel;
     [[AppoxeeLocationManager shared] disableLocationMonitoring];
     NSLog(@"Geofencing stopped!");
     result(@"GEOFENCES_STOPPED_OK");
+  } else if ([@"getInitialMessage" isEqualToString:call.method]){
+    NSLog(@"getInitialMessage...");
+      NSLog(@"%@", _initialMessage);
+      result(_initialMessage);
   } else {
     result(FlutterMethodNotImplemented);
   }
