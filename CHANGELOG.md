@@ -1,3 +1,6 @@
+## 0.0.10
+* Update Mapp iOS Sdk to 6.0.6
+
 ## 0.0.9
 * Added image information to notification data in Flutter layer (Android version)
 * Fixed error that prevented notification data from being passed to the Flutter layer if the app was launched by tapping it.
