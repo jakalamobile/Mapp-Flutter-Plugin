@@ -11,6 +11,7 @@ static FlutterMethodChannel *channel;
 @interface MappSdkPlugin ()
 
 @property NSDictionary *initialMessage;
+@property NSDictionary *lauchOptions;
 
 @end
 
@@ -26,6 +27,14 @@ static FlutterMethodChannel *channel;
   [registrar addApplicationDelegate:instance];
 }
 
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
+    
+    // NSLog(@"==== SONO PRONTO PET IL LAUCHOPTIONS");
+    _lauchOptions = launchOptions;
+    
+    return YES;
+}
+
 
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler{
@@ -38,6 +47,14 @@ static FlutterMethodChannel *channel;
     NSString* dpl = [userInfo objectForKey:@"apx_dpl"];
     NSNumber* uniqueID = @([[userInfo objectForKey:@"apbcd"] intValue]);
     NSNumber *badge = [NSNumber numberWithInt:0];
+    
+    if ( dpl == nil ){
+        dpl = @"";
+    }
+    
+    if ( media == nil){
+        media = @"";
+    }
     
     NSDictionary<NSString *, id>* extraFields = @{
         @"ios_apx_media": media,
@@ -60,6 +77,13 @@ static FlutterMethodChannel *channel;
         };
     }
     
+   [[Appoxee shared] userNotificationCenter:center didReceiveNotificationResponse:response withAppoxeeCompletionHandler:^{
+           
+        // When the completion handler is called, this means that Appoxee completed it's execution.
+        // Call the completion handler.
+        completionHandler();
+    }];
+    
 }
 
 
@@ -75,7 +99,7 @@ static FlutterMethodChannel *channel;
     [[PushMessageDelegate sharedObject] initWith:channel];
     [[PushMessageDelegate sharedObject] addNotificationListeners];
     SERVER serv = [self getServerKeyFor:serverNumber];
-    [[Appoxee shared] engageAndAutoIntegrateWithLaunchOptions:NULL andDelegate:(id)[PushMessageDelegate sharedObject] with:serv];
+    [[Appoxee shared] engageAndAutoIntegrateWithLaunchOptions:_lauchOptions andDelegate:(id)[PushMessageDelegate sharedObject] with:serv];
     INAPPSERVER inappServ = [self getInappServerKeyFor: serverNumber];
     [[AppoxeeInapp shared] engageWithDelegate:(id)[InAppMessageDelegate sharedObject] with:inappServ];
     result(@"OK");
