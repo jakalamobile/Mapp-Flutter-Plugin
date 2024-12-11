@@ -2,7 +2,7 @@ group 'com.mapp.flutter.sdk'
 version '1.0'
 
 android {
-    namespace 'com.jakala.mapp.flutter'
+    namespace 'com.mapp.flutter.sdk'
 }
 
 buildscript {

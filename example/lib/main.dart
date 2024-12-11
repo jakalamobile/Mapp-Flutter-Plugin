@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           primaryColor: const Color(0xFF00BAFF),
           primaryColorDark: const Color(0xFF0592D7),
-          accentColor: const Color(0xFF58585A),
+          // accentColor: const Color(0xFF58585A),
           cardColor: const Color(0xFF888888)),
       home: const HomePage(),
     );
