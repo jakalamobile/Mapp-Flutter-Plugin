@@ -1,6 +1,10 @@
 group 'com.mapp.flutter.sdk'
 version '1.0'
 
+android {
+    namespace 'com.jakala.mapp.flutter'
+}
+
 buildscript {
     repositories {
         mavenLocal()

@@ -31,3 +31,5 @@ doc/api/
 /android/.idea/gradle.xml
 /android/.idea/misc.xml
 .idea/libraries/
+
+.fvm/
