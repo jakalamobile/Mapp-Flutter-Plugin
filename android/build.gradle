@@ -14,8 +14,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
-        classpath 'com.google.gms:google-services:4.3.15'
+        classpath 'com.android.tools.build:gradle:8.5.2'
+        classpath 'com.google.gms:google-services:4.4.2'
     }
 }
 
@@ -28,27 +28,34 @@ rootProject.allprojects {
     }
 }
 
-apply plugin: 'com.android.library'
-apply plugin: 'com.google.gms.google-services'
+plugins{
+    id "com.android.library"
+    id "com.google.gms.google-services"
+}
 
 android {
-    compileSdkVersion 33
+    namespace 'com.mapp.flutter.sdk'
+    compileSdkVersion 34
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 33
+        minSdkVersion 21
+        targetSdkVersion 34
     }
-    buildToolsVersion '33.0.0'
+    
+    buildFeatures {
+        buildConfig = true
+    }
 }
+
 dependencies{
+    implementation('com.mapp.sdk:mapp-android:6.0.25') // 6.0.20.2
     implementation "androidx.appcompat:appcompat:1.6.1"
-    implementation platform('com.google.firebase:firebase-bom:29.0.4')
+    implementation platform('com.google.firebase:firebase-bom:33.5.1')
     implementation('com.google.firebase:firebase-messaging')
     implementation 'com.google.firebase:firebase-analytics'
-    implementation('com.mapp.sdk:mapp-android:6.0.20.2')
 }
