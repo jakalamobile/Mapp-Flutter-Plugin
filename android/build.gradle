@@ -1,10 +1,6 @@
 group 'com.mapp.flutter.sdk'
 version '1.0'
 
-android {
-    namespace 'com.mapp.flutter.sdk'
-}
-
 buildscript {
     repositories {
         mavenLocal()
@@ -19,6 +15,11 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.android.library"
+    id "com.google.gms.google-services"
+}
+
 rootProject.allprojects {
     repositories {
         mavenLocal()
@@ -26,11 +27,6 @@ rootProject.allprojects {
         mavenCentral()
         maven { url "https://maven.google.com/"}
     }
-}
-
-plugins{
-    id "com.android.library"
-    id "com.google.gms.google-services"
 }
 
 android {
