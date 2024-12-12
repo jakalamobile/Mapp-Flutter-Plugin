@@ -1,6 +1,3 @@
-group 'com.mapp.flutter.sdk'
-version '1.0'
-
 buildscript {
     repositories {
         mavenLocal()
