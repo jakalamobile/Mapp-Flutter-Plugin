@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'mapp_sdk'
-  s.version          = '0.0.8'
+  s.version          = '0.0.9'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
 A new flutter plugin project.
@@ -16,8 +16,8 @@ A new flutter plugin project.
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.dependency 'MappSDK', '6.0.6'
-  s.dependency 'MappSDKInapp', '6.0.6.8'
+  s.dependency 'MappSDK', '6.0.8'
+  s.dependency 'MappSDKInapp', '6.0.6.10'
   s.dependency 'MappSDKGeotargeting', '6.0.5'
   s.platform = :ios, '10.0'
   s.static_framework = true
