@@ -57,7 +57,8 @@ import io.flutter.plugin.common.PluginRegistry;
  * MappSdkPlugin
  */
 @SuppressWarnings("Convert2MethodRef")
-public class MappSdkPlugin implements FlutterPlugin, ActivityAware, MethodCallHandler, PluginRegistry.RequestPermissionsResultListener {
+public class MappSdkPlugin
+        implements FlutterPlugin, ActivityAware, MethodCallHandler, PluginRegistry.RequestPermissionsResultListener {
 
     public static final String ENGINE_ID = "MappSdkPluggin";
     public static final String MAPP_CHANNEL_NAME = "mapp_sdk";
@@ -68,9 +69,11 @@ public class MappSdkPlugin implements FlutterPlugin, ActivityAware, MethodCallHa
 
     private static final String SHARED_PREFS_FILE_NAME = "mapp_engage_flutter_plugin_prefs";
 
-    /// The MethodChannel that will the communication between Flutter and native Android
+    /// The MethodChannel that will the communication between Flutter and native
+    /// Android
     ///
-    /// This local reference serves to register the plugin with the Flutter Engine and unregister it
+    /// This local reference serves to register the plugin with the Flutter Engine
+    /// and unregister it
     /// when the Flutter Engine is detached from the Activity
     private MethodChannel channel;
     private Application application;
@@ -124,7 +127,6 @@ public class MappSdkPlugin implements FlutterPlugin, ActivityAware, MethodCallHa
         }
     };
 
-
     private final Appoxee.OnInitCompletedListener onInitCompletedListener = new Appoxee.OnInitCompletedListener() {
         @Override
         public void onInitCompleted(boolean successful, Exception failReason) {
@@ -144,7 +146,8 @@ public class MappSdkPlugin implements FlutterPlugin, ActivityAware, MethodCallHa
         application = (Application) flutterPluginBinding.getApplicationContext();
         channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), MAPP_CHANNEL_NAME);
         EventEmitter.getInstance().attachChannel(channel);
-        sharedPrefs = application.getApplicationContext().getSharedPreferences(SHARED_PREFS_FILE_NAME, Context.MODE_PRIVATE);
+        sharedPrefs = application.getApplicationContext().getSharedPreferences(SHARED_PREFS_FILE_NAME,
+                Context.MODE_PRIVATE);
     }
 
     @Override
@@ -264,7 +267,7 @@ public class MappSdkPlugin implements FlutterPlugin, ActivityAware, MethodCallHa
 
     private void engage(List<Object> args, @NonNull Result result) {
         try {
-            //[sdkKey, googleProjectId, server.index, appID, tenantID]
+            // [sdkKey, googleProjectId, server.index, appID, tenantID]
             AppoxeeOptions options = new AppoxeeOptions();
             options.sdkKey = (String) args.get(0);
             options.server = getServerByIndex((Integer) args.get(2));
@@ -479,7 +482,8 @@ public class MappSdkPlugin implements FlutterPlugin, ActivityAware, MethodCallHa
 
     private AppoxeeOptions.Server getServerByIndex(int index) {
         if (index < 0 || index > AppoxeeOptions.Server.values().length) {
-            throw new IndexOutOfBoundsException("Server must be one of the following: L3 [0], L3_US [1], EMC [2], EMC_US [3], CROC [4], TEST [5], TEST55 [6] and proper index provided.");
+            throw new IndexOutOfBoundsException(
+                    "Server must be one of the following: L3 [0], L3_US [1], EMC [2], EMC_US [3], CROC [4], TEST [5], TEST55 [6] and proper index provided.");
         }
         return AppoxeeOptions.Server.values()[index];
     }
@@ -516,7 +520,8 @@ public class MappSdkPlugin implements FlutterPlugin, ActivityAware, MethodCallHa
 
     @Override
     public void onDetachedFromActivityForConfigChanges() {
-        devLogger.d("detached from activity for config changes: " + (activity != null ? activity.getClass().getName() : "null"));
+        devLogger.d("detached from activity for config changes: "
+                + (activity != null ? activity.getClass().getName() : "null"));
         this.activity = null;
         this.channel.setMethodCallHandler(null);
         this.geofencePermissions = null;
@@ -540,7 +545,8 @@ public class MappSdkPlugin implements FlutterPlugin, ActivityAware, MethodCallHa
     }
 
     public static void handleIntent(Activity activity, Intent intent) {
-        if (activity == null || intent == null) return;
+        if (activity == null || intent == null)
+            return;
         Intent richIntent = intent.getParcelableExtra("intent");
         if (richIntent != null && richIntent.getAction().equals(Action.RICH_PUSH)) {
             Appoxee.handleRichPush(activity, richIntent);
@@ -559,8 +565,9 @@ public class MappSdkPlugin implements FlutterPlugin, ActivityAware, MethodCallHa
     private void requestPermissionPostNotification() {
         // check permission only for Android 13 and higher
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            //check if permission already granted
-            if (activity.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            // check if permission already granted
+            if (activity
+                    .checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
                 // if granted, set result to true
                 result.success(true);
             } else {
@@ -570,9 +577,12 @@ public class MappSdkPlugin implements FlutterPlugin, ActivityAware, MethodCallHa
                     Set<String> set = new ArraySet<>(existingPermissions);
                     set.add(Manifest.permission.POST_NOTIFICATIONS);
                     sharedPrefs.edit().putStringSet("requested_permissions", set).apply();
-                    activity.requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, POST_NOTIFICATION_PERMISSION_REQUEST_CODE);
+                    activity.requestPermissions(new String[] { Manifest.permission.POST_NOTIFICATIONS },
+                            POST_NOTIFICATION_PERMISSION_REQUEST_CODE);
                 } else {
-                    result.error("PERMISSION_PERMANENTLY_DENIED", "Permission is permanently denied. Go to system settings and enable Notification permission", null);
+                    result.error("PERMISSION_PERMANENTLY_DENIED",
+                            "Permission is permanently denied. Go to system settings and enable Notification permission",
+                            null);
                 }
             }
         } else {
@@ -585,21 +595,29 @@ public class MappSdkPlugin implements FlutterPlugin, ActivityAware, MethodCallHa
     private void resolvePostNotificationPermissionResult() {
         // check if permission is denied
         if (activity.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
-            // if permission is denied we need to check if permission rationale should be shown;
+            // if permission is denied we need to check if permission rationale should be
+            // shown;
             // it rationale should be shown, we can request permission once again
             if (activity.shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-                activity.requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, POST_NOTIFICATION_PERMISSION_REQUEST_CODE);
+                activity.requestPermissions(new String[] { Manifest.permission.POST_NOTIFICATIONS },
+                        POST_NOTIFICATION_PERMISSION_REQUEST_CODE);
             } else {
-                // when permission was denied and rationale should not be shown, then permission is permanently denied;
-                // in that case, app can't request permission and only way to handle this is to open application system settings;
-                // in this case, we only send error and leave opening the system settings to the client application
-                result.error("PERMISSION_PERMANENTLY_DENIED", "Permission is permanently denied. Go to system settings and enable Notification permission", null);
+                // when permission was denied and rationale should not be shown, then permission
+                // is permanently denied;
+                // in that case, app can't request permission and only way to handle this is to
+                // open application system settings;
+                // in this case, we only send error and leave opening the system settings to the
+                // client application
+                result.error("PERMISSION_PERMANENTLY_DENIED",
+                        "Permission is permanently denied. Go to system settings and enable Notification permission",
+                        null);
             }
         }
     }
 
     @Override
-    public boolean onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public boolean onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+            @NonNull int[] grantResults) {
         if (requestCode == POST_NOTIFICATION_PERMISSION_REQUEST_CODE) {
             for (int i = 0; i < permissions.length; i++) {
                 String p = permissions[i];

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,7 @@
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		A340EFF02771C383001BCCD0 /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = A340EFEF2771C383001BCCD0 /* NotificationService.m */; };
 		A340EFF42771C383001BCCD0 /* RunnerExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A340EFEC2771C382001BCCD0 /* RunnerExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A380AAEB2D47BA9F0059437B /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A380AAEA2D47BA9F0059437B /* UserNotifications.framework */; };
 		A3FDCE0D2747D1FC00FB14A7 /* AppoxeeConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3FDCE0C2747D1FC00FB14A7 /* AppoxeeConfig.plist */; };
 /* End PBXBuildFile section */
 
@@ -76,6 +77,7 @@
 		A340EFEF2771C383001BCCD0 /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
 		A340EFF12771C383001BCCD0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A340EFFA277204D9001BCCD0 /* RunnerExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunnerExtension.entitlements; sourceTree = "<group>"; };
+		A380AAEA2D47BA9F0059437B /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		A3FDCE0C2747D1FC00FB14A7 /* AppoxeeConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = AppoxeeConfig.plist; sourceTree = SOURCE_ROOT; };
 		A3FDCE0E2747D2B400FB14A7 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		B2527CD67145B2D98F4FFC91 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A380AAEB2D47BA9F0059437B /* UserNotifications.framework in Frameworks */,
 				740E2A9A905044678978F946 /* libPods-Runner.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -114,6 +117,7 @@
 		88ED9529C47C3568B92A22BC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A380AAEA2D47BA9F0059437B /* UserNotifications.framework */,
 				8879EAA54B4BF3BCBAF85924 /* libPods-Runner.a */,
 			);
 			name = Frameworks;
@@ -197,13 +201,13 @@
 			buildPhases = (
 				4E7C3DCC36A927D135FFE14A /* [CP] Check Pods Manifest.lock */,
 				9740EEB61CF901F6004384FC /* Run Script */,
+				A340EFF52771C383001BCCD0 /* Embed App Extensions */,
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				2794B90A6991961B25C6C211 /* [CP] Copy Pods Resources */,
-				A340EFF52771C383001BCCD0 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
@@ -238,7 +242,7 @@
 		97C146E61CF9000F007C117D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1300;
+				LastUpgradeCheck = 1510;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					97C146ED1CF9000F007C117D = {
@@ -310,10 +314,12 @@
 		};
 		3B06AD1E1E4923F5004D2608 /* Thin Binary */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}",
 			);
 			name = "Thin Binary";
 			outputPaths = (
@@ -346,6 +352,7 @@
 		};
 		9740EEB61CF901F6004384FC /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -450,7 +457,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -530,7 +537,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -579,7 +586,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;

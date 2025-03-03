@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -100,9 +101,13 @@ class MappSdk {
 
   static Future<String?> showNotificationsOnForeground(
       bool showNotification) async {
-    final String? version = await _channel.invokeMethod(
-        Method.SHOW_NOTIFICATION_ON_FOREGROUND, [showNotification]);
-    return 'successfull $version postponeNotificationRequest method invoked';
+    if (Platform.isIOS) {
+      final String? version = await _channel.invokeMethod(
+          Method.SHOW_NOTIFICATION_ON_FOREGROUND, [showNotification]);
+      return 'successfull $version postponeNotificationRequest method invoked';
+    } else {
+      return 'Required only for iOS.';
+    }
   }
 
   static Future<bool> isReady() async {
@@ -204,7 +209,11 @@ class MappSdk {
 
   /// Only for Android - Request permission to post notifications, for Android 13 and higher
   static Future<bool> requestPermissionPostNotifications() async {
-    return await _channel
-        .invokeMethod(Method.PERSMISSION_REQUEST_POST_NOTIFICATION);
+    if (Platform.isIOS) {
+      return true;
+    } else {
+      return await _channel
+          .invokeMethod(Method.PERSMISSION_REQUEST_POST_NOTIFICATION);
+    }
   }
 }

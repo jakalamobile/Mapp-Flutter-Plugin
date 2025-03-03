@@ -33,3 +33,6 @@ doc/api/
 .idea/libraries/
 
 .fvm/
+/android/property**
+example/android/app/property*
+.DS_Store

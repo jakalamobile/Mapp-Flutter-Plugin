@@ -16,11 +16,11 @@
 	<key>sdk</key>
 	<dict>
 		<key>app_id</key>
-		<string>206943</string>
+		<string>207180</string>
 		<key>dmc_system_id</key>
 		<integer>5963</integer>
 		<key>sdk_key</key>
-		<string>181fd0e07a962d.33762695</string>
+		<string>192576d196166f.71612913</string>
 		<key>is_eu</key>
 		<true/>
 		<key>open_landing_page_inside_app</key>
